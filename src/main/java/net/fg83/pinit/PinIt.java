@@ -42,6 +42,7 @@ public final class PinIt extends JavaPlugin implements Listener {
             createServerTable();
             createPlayersTable();
             createInfoTable();
+            versionCheck();
         }
         catch (ClassNotFoundException | SQLException | IOException e){
             getLogger().info("Database error: {" + e.getMessage() + "}");
@@ -108,7 +109,8 @@ public final class PinIt extends JavaPlugin implements Listener {
                 "location_world TEXT NOT NULL, " +
                 "locationX INTEGER NOT NULL, " +
                 "locationY INTEGER NOT NULL, " +
-                "locationZ INTEGER NOT NULL)";
+                "locationZ INTEGER NOT NULL," +
+                "category TEXT DEFAULT 'uncategorized')";
         sendSQLCommand(statement);
     }
     private void createPlayersTable() {
@@ -121,9 +123,6 @@ public final class PinIt extends JavaPlugin implements Listener {
         sendSQLCommand(statement);
     }
     private void createInfoTable() {
-        if (config.getBoolean("debug-mode")){
-            getLogger().info("createInfoTable() called");
-        }
         String statement = "CREATE TABLE IF NOT EXISTS info (record TEXT NOT NULL, data TEXT NOT NULL)";
         sendSQLCommand(statement);
     }
@@ -138,8 +137,7 @@ public final class PinIt extends JavaPlugin implements Listener {
                 "locationX INTEGER NOT NULL, " +
                 "locationY INTEGER NOT NULL, " +
                 "locationZ INTEGER NOT NULL, " +
-                "shared INTEGER DEFAULT 0, " +
-                "shared_by TEXT DEFAULT NULL)";
+                "category TEXT DEFAULT 'uncategorized')";
         sendSQLCommand(statement);
     }
     public void updatePlayersTable(Player player){
@@ -217,5 +215,25 @@ public final class PinIt extends JavaPlugin implements Listener {
         else {
             return world;
         }
+    }
+
+    public void versionCheck(){
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                String versionCheckQuery = "SELECT data FROM info WHERE record = 'pinit-version'";
+                Statement versionCheckStatement = connection.createStatement();
+                ResultSet versionCheck = versionCheckStatement.executeQuery(versionCheckQuery);
+                if (versionCheck.next()) {
+                    versionCheck.getString("data");
+                } else {
+                    String input = "INSERT INTO info (record, data) VALUES ('pinit-version', '" + plugin.getDescription().getVersion() + "')";
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(input);
+                }
+            }
+            catch (SQLException e){
+                getLogger().info(e.getMessage());
+            }
+        });
     }
 }

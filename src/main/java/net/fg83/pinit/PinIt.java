@@ -109,7 +109,7 @@ public final class PinIt extends JavaPlugin implements Listener {
                 "location_world TEXT NOT NULL, " +
                 "locationX INTEGER NOT NULL, " +
                 "locationY INTEGER NOT NULL, " +
-                "locationZ INTEGER NOT NULL," +
+                "locationZ INTEGER NOT NULL, " +
                 "category TEXT DEFAULT 'uncategorized')";
         sendSQLCommand(statement);
     }

@@ -1,0 +1,56 @@
+name: PinIt
+version: '${project.version}'
+main: net.fg83.pinit.PinIt
+api-version: '1.19'
+authors: [fingerguns83]
+description: Keep track of important locations
+website: https://fg83.net
+permissions:
+  pinit:
+    default: op
+    children:
+      pinit.warp:
+        default: op
+      pinit.server:
+        description: Allow player to control server pins
+        children:
+          pinit.server.add:
+            description: Allow player to add server pins
+          pinit.server.delete:
+            description: Allow player to delete server pins
+      pinit.use:
+        default: true
+        children:
+          pinit.use.share:
+            default: true
+
+commands:
+  pinit:
+    description: Save a quick pin.
+    usage: /pinit <name>
+    permission: pinit.use
+  makepin:
+    description: Save a new pin.
+    usage: /makepin <world> <x> <y> <z> <name>
+    permission: pinit.use
+  pinlist:
+    description: Fetch a list of all pins, sorted by world if desired.
+    usage: /pinlist [true|false] [world]
+    permission: pinit.use
+  deletepin:
+    description: Delete the specified pin.
+    usage: /deletepin <pinId>
+    permission: pinit.use
+  sharepin:
+    description: Send pin to another player
+    usage: /sharepin <pinId> <player>
+    permission: pinit.use.share
+  serverpinit:
+    usage: /serverpinit <name>
+    permission: pinit.server.add
+  makeserverpin:
+    usage: /serverpin <world> <x> <y> <z> <name>
+    permission: pinit.server.add
+  deleteserverpin:
+    usage: /deleteserverpin <pinId>
+    permission: pinit.server.delete

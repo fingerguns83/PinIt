@@ -77,7 +77,6 @@ public final class PinIt extends JavaPlugin implements Listener {
         plugin.getCommand("deleteserverpin").setTabCompleter(new DeletePinCompleter());
 
         plugin.getCommand("sharepin").setExecutor(new SharePinCommand(this));
-        plugin.getCommand("sharepin").setTabCompleter(new SharePinCompleter(this));
 
         //plugin.getCommand("findpin").setExecutor(new FindPinCommand(this));
         //plugin.getCommand("findpin").setTabCompleter(new FindPinCompleter(this));

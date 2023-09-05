@@ -49,10 +49,6 @@ public class SharePinCommand implements CommandExecutor {
             plugin.sendPinItMessage(player, "Player is either offline or does not exist.", true);
             return false;
         }
-        if (target.equals(player)){
-            plugin.sendPinItMessage(player, "Please choose another player.", true);
-            return false;
-        }
 
         // Send target player message
         int finalPinId = pinId;

@@ -75,7 +75,6 @@ public class PinListCommand implements CommandExecutor {
             TextComponent headerMessage;
             if (finalIsServer){
                 headerMessage = new TextComponent("----------Server Pins----------");
-                plugin.getLogger().info("Server list called");
                 pinList.populate(finalPageNo, pinWorld[0], null);
             }
             else {

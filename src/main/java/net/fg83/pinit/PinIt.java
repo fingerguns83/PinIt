@@ -42,11 +42,16 @@ public final class PinIt extends JavaPlugin implements Listener {
             createServerTable();
             createPlayersTable();
             createInfoTable();
-            versionCheck();
         }
         catch (ClassNotFoundException | SQLException | IOException e){
             getLogger().info("Database error: {" + e.getMessage() + "}");
         }
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, new Runnable() {
+            @Override
+            public void run() {
+                plugin.versionCheck();
+            }
+        }, 300);
 
         plugin.getServer().getPluginManager().registerEvents(this, this);
 
@@ -100,9 +105,6 @@ public final class PinIt extends JavaPlugin implements Listener {
 
     // TABLE INITIATION
     private void createServerTable() {
-        if (config.getBoolean("debug-mode")){
-            getLogger().info("createServerTable() called");
-        }
         String statement = "CREATE TABLE IF NOT EXISTS server " +
                 "(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT NOT NULL, " +
@@ -114,22 +116,26 @@ public final class PinIt extends JavaPlugin implements Listener {
         sendSQLCommand(statement);
     }
     private void createPlayersTable() {
-        if (config.getBoolean("debug-mode")){
-            getLogger().info("createPlayersTable() called");
-        }
         String statement = "CREATE TABLE IF NOT EXISTS players " +
                 "(uuid TEXT NOT NULL UNIQUE, " +
                 "name TEXT NOT NULL)";
         sendSQLCommand(statement);
     }
     private void createInfoTable() {
-        String statement = "CREATE TABLE IF NOT EXISTS info (record TEXT NOT NULL, data TEXT NOT NULL)";
-        sendSQLCommand(statement);
+        String input = "CREATE TABLE IF NOT EXISTS info (record TEXT NOT NULL, data TEXT NOT NULL)";
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(input);
+                statement.close();
+                versionCheck();
+            }
+            catch (SQLException e){
+                getLogger().info("Database error: {" + e.getMessage() + "}");
+            }
+        });
     }
     public void createPlayerTable(Player player){
-        if (config.getBoolean("debug-mode")){
-            getLogger().info("createPlayerTable() called for " + player.getName());
-        }
         String statement = "CREATE TABLE IF NOT EXISTS player" + player.getUniqueId().toString().replace("-", "") + " " +
                 "(id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT NOT NULL, " +
@@ -141,9 +147,6 @@ public final class PinIt extends JavaPlugin implements Listener {
         sendSQLCommand(statement);
     }
     public void updatePlayersTable(Player player){
-        if (config.getBoolean("debug-mode")){
-            getLogger().info("updatePlayersTable() called");
-        }
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate("INSERT OR REPLACE INTO players (uuid, name) VALUES ('" +
@@ -217,23 +220,21 @@ public final class PinIt extends JavaPlugin implements Listener {
         }
     }
 
-    public void versionCheck(){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                String versionCheckQuery = "SELECT data FROM info WHERE record = 'pinit-version'";
-                Statement versionCheckStatement = connection.createStatement();
-                ResultSet versionCheck = versionCheckStatement.executeQuery(versionCheckQuery);
-                if (versionCheck.next()) {
-                    versionCheck.getString("data");
-                } else {
-                    String input = "INSERT INTO info (record, data) VALUES ('pinit-version', '" + plugin.getDescription().getVersion() + "')";
-                    Statement statement = connection.createStatement();
-                    statement.executeUpdate(input);
-                }
+    public void versionCheck() {
+        try {
+            String versionCheckQuery = "SELECT * FROM info WHERE record='pinit-version'";
+            Statement versionCheckStatement = connection.createStatement();
+            ResultSet versionCheck = versionCheckStatement.executeQuery(versionCheckQuery);
+            if (versionCheck.next()) {
+                versionCheck.getString("data");
+            } else {
+                String input = "INSERT INTO info (record, data) VALUES ('pinit-version', '" + plugin.getDescription().getVersion() + "')";
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(input);
             }
-            catch (SQLException e){
-                getLogger().info(e.getMessage());
-            }
-        });
+        }
+        catch (SQLException e){
+            getLogger().info(e.getMessage());
+        }
     }
 }

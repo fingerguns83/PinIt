@@ -39,7 +39,7 @@ public class PinListCommand implements CommandExecutor {
                     pageNo = Integer.parseInt(args[2]);
                 }
                 catch (NumberFormatException e){
-                    plugin.sendPinItMessage(player, "Invalid command! Usage: \"/listpins [world] [server|me] [page]", true);
+                    plugin.sendPinItMessage(player, "Invalid command! Usage: \"/pinlist [server|me] [world] [page]", true);
                 }
             case 2:
                 if (!args[1].equalsIgnoreCase("#all")){
@@ -60,12 +60,13 @@ public class PinListCommand implements CommandExecutor {
                     isServer = true;
                 }
                 else if (!args[0].equalsIgnoreCase("me")){
-                    plugin.sendPinItMessage(player, "Invalid command! Usage: \"/listpins [world] [server|me] [page]", true);
+                    plugin.sendPinItMessage(player, "Invalid command! Usage: \"/pinlist [server|me] [world] [page]", true);
+                    return false;
                 }
             case 0:
                 break;
             default:
-                plugin.sendPinItMessage(player, "Invalid command! Usage: \"/listpins [true|false] [world] [page]", true);
+                plugin.sendPinItMessage(player, "Invalid command! Usage: \"/pinlist [server|me] [world] [page]", true);
                 return false;
         }
 
@@ -102,13 +103,20 @@ public class PinListCommand implements CommandExecutor {
                     if (pinWorld[0] == null){
                         pinWorld[0] = "#all";
                     }
+                    String listType = "";
+                    if (finalIsServer){
+                        listType = "server";
+                    }
+                    else {
+                        listType = "me";
+                    }
 
                     // Make Previous Button (if applicable)
                     if (pinList.hasPrev()){
                         TextComponent prev = new TextComponent("<--");
                         prev.setColor(ChatColor.DARK_AQUA);
                         prev.setBold(true);
-                        prev.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + finalIsServer + " " + pinWorld[0] + " " + pinList.getPrev()));
+                        prev.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + listType + " " + pinWorld[0] + " " + pinList.getPrev()));
                         controls.addExtra(prev);
                     }
 
@@ -123,7 +131,7 @@ public class PinListCommand implements CommandExecutor {
                         TextComponent next = new TextComponent("-->");
                         next.setColor(ChatColor.DARK_AQUA);
                         next.setBold(true);
-                        next.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + finalIsServer + " " + pinWorld[0] + " " + pinList.getNext()));
+                        next.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + listType + " " + pinWorld[0] + " " + pinList.getNext()));
                         controls.addExtra(next);
                     }
 

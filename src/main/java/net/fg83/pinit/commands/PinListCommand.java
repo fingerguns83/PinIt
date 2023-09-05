@@ -108,7 +108,7 @@ public class PinListCommand implements CommandExecutor {
                         TextComponent prev = new TextComponent("<--");
                         prev.setColor(ChatColor.DARK_AQUA);
                         prev.setBold(true);
-                        prev.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/listpins " + finalIsServer + " " + pinWorld[0] + " " + pinList.getPrev()));
+                        prev.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + finalIsServer + " " + pinWorld[0] + " " + pinList.getPrev()));
                         controls.addExtra(prev);
                     }
 
@@ -123,7 +123,7 @@ public class PinListCommand implements CommandExecutor {
                         TextComponent next = new TextComponent("-->");
                         next.setColor(ChatColor.DARK_AQUA);
                         next.setBold(true);
-                        next.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/listpins " + finalIsServer + " " + pinWorld[0] + " " + pinList.getNext()));
+                        next.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + finalIsServer + " " + pinWorld[0] + " " + pinList.getNext()));
                         controls.addExtra(next);
                     }
 

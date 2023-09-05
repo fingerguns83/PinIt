@@ -35,7 +35,7 @@ public class PinList {
         if (world != null){
             fetchStatement = fetchStatement.concat(" WHERE location_world='" + world + "'");
         }
-        fetchStatement = fetchStatement.concat(" ORDER BY LOWER(name), name LIMIT 10");
+        fetchStatement = fetchStatement.concat(" ORDER BY LOWER(name), name LIMIT 6");
         if (pageNo > 1){
             int offset = (pageNo - 1) * 10;
             fetchStatement = fetchStatement.concat(" OFFSET " + offset);
@@ -81,7 +81,7 @@ public class PinList {
         // Check for additional pages
         int recordCount = countRecords(player, world);
 
-        if ((pageNo * 10) < recordCount){
+        if ((pageNo * 6) < recordCount){
             hasNextPage = true;
         }
 

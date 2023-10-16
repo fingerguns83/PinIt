@@ -2,6 +2,7 @@ name: PinIt
 version: '${project.version}'
 main: net.fg83.pinit.PinIt
 api-version: '1.19'
+softdepend: ['Multiverse-Core', LuckPerms]
 authors: [fingerguns83]
 description: Keep track of important locations
 website: https://fg83.net
@@ -18,6 +19,8 @@ permissions:
             description: Allow player to add server pins
           pinit.server.delete:
             description: Allow player to delete server pins
+          pinit.server.deathpins:
+            description: Allow player to see other players' death pins.
       pinit.use:
         default: true
         children:
@@ -27,30 +30,45 @@ permissions:
 commands:
   pinit:
     description: Save a quick pin.
-    usage: /pinit <name>
+    usage: /pinit <category> <name>
     permission: pinit.use
   makepin:
-    description: Save a new pin.
-    usage: /makepin <world> <x> <y> <z> <name>
+    description: Make a new pin.
+    usage: /makepin <world> <x> <y> <z> <category> <name>
     permission: pinit.use
   pinlist:
-    description: Fetch a list of all pins, sorted by world if desired.
-    usage: /pinlist [true|false] [world]
+    description: Fetch a list of all pins, sorted by world and/or category if desired.
+    usage: /pinlist [me|server] [world] [category]
     permission: pinit.use
   deletepin:
-    description: Delete the specified pin.
+    description: Delete the specified pin. (usually accessed via GUI)
     usage: /deletepin <pinId>
     permission: pinit.use
   sharepin:
-    description: Send pin to another player
+    description: Send pin to another player (usually accessed via GUI)
     usage: /sharepin <pinId> <player>
     permission: pinit.use.share
+  findpin:
+    description: Search for a pin
+    usage: /findpin <query>
+    permission: pinit.use
   serverpinit:
-    usage: /serverpinit <name>
+    description: Save a quick server pin.
+    usage: /serverpinit <category> <name>
     permission: pinit.server.add
   makeserverpin:
-    usage: /serverpin <world> <x> <y> <z> <name>
+    description: Make a new server pin.
+    usage: /serverpin <world> <x> <y> <z> <category> <name>
     permission: pinit.server.add
   deleteserverpin:
+    description: Delete the specified pin from the server list. (usually accessed via GUI)
     usage: /deleteserverpin <pinId>
     permission: pinit.server.delete
+  deathpin:
+    description: Get the pin of your last death. Players with "pinit.server.deathpins" can add a player argument to get another players' last death pin.
+    usage: /deathpin [player]
+    permission: pinit.use
+  pinwarp:
+    description: Teleport player to pin.
+    usage: /pinwarp [server|me] <pinId>
+    permission: pinit.warp

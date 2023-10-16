@@ -8,7 +8,7 @@ import org.bukkit.command.TabCompleter;
 import java.util.List;
 
 public class FindPinCompleter implements TabCompleter {
-    PinIt plugin;
+    final PinIt plugin;
     public FindPinCompleter(PinIt plugin) { this.plugin = plugin; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {

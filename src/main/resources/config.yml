@@ -1,3 +1,25 @@
-vanilla-overworld: world
-vanilla-nether: world_nether
-vanilla-end: world_the_end
+# If using Velocity, change this to whatever name you use with the "/server" command.
+# If you're not using Velocity, do whatever you want.
+# You can change the name of this as needed.
+server-name: server
+
+enable-death-pins: true
+
+# Personal Pin Limit
+# Set to "-1" for unlimited.
+personal-pin-limit: -1
+
+# MySQL configuration
+# Leave this "false" for the default SQLite
+mysql-enable: false
+# These defaults are just for convenience, but you can change these values as needed.
+mysql-ip: 127.0.0.1
+mysql-port: 3306
+mysql-user: pinit
+mysql-password: pinitpassword # Seriously, change this
+mysql-database: pinit
+
+# This enables Velocity mode.
+# You *MUST* configure a MySQL server to use Velocity.
+velocity: false
+

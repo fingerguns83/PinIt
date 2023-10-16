@@ -53,11 +53,11 @@ public class PinListCompleter implements TabCompleter {
 
             // Case 3: Tab completion for the third argument (tag).
             case 3 -> {
-                List<String> tags;
+                List<String> tags = new ArrayList<>();
                 if (args[0].equalsIgnoreCase("server")) {
-                    tags = plugin.getAllTags(null);
+                    tags.addAll(plugin.getAllTags(null));
                 } else {
-                    tags = plugin.getAllTags(player);
+                    tags.addAll(plugin.getAllTags(player));
                 }
                 tags.add("#all");
                 for (String tag : tags) {

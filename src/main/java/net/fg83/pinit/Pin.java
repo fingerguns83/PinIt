@@ -163,6 +163,9 @@ public class Pin {
     public Boolean getGlobal() {
         return global;
     }
+    public Boolean getDeathPin(){
+        return deathPin;
+    }
 
     public String getCoordinatesString(Boolean command){
         String separator;
@@ -202,7 +205,7 @@ public class Pin {
                         worldId + "', " +
                         locationX + ", " +
                         locationY + ", " +
-                        locationZ;
+                        locationZ + ")";
             }
 
             try {
@@ -459,27 +462,9 @@ public class Pin {
         // Create a TextComponent to construct the output message
         TextComponent output = new TextComponent();
 
-        // Create a TextComponent for the pin name with gold color and italic style
-        TextComponent nameMessage = new TextComponent("*" + this.pinName);
-        nameMessage.setColor(ChatColor.GOLD);
-        nameMessage.setItalic(true);
-        output.addExtra(nameMessage);
-
-        // Add a colon and space to separate the pin name and location information
-        output.addExtra(": ");
-
-        // Create a TextComponent for the location message with green color
-        TextComponent locationMessage = new TextComponent("(" + this.worldFancyName + ") ");
-        locationMessage.addExtra(this.getCoordinatesString(false));
-        locationMessage.setColor(ChatColor.GREEN);
-
-        // Add the location message to the output TextComponent
-        output.addExtra(locationMessage);
-        output.addExtra(" ");
-
         // Create a TextComponent for the accept message (the [+] button) with dark green color
         TextComponent acceptMessage = new TextComponent("[+]");
-        acceptMessage.setColor(ChatColor.DARK_GREEN);
+        acceptMessage.setColor(ChatColor.LIGHT_PURPLE);
 
         // Construct the command for adding the pin to the player's pin list
         String addPinCommand = "/makepin " + this.worldName +
@@ -498,6 +483,24 @@ public class Pin {
 
         // Add the "accept message" to the output TextComponent
         output.addExtra(acceptMessage);
+
+        // Create a TextComponent for the pin name with gold color and italic style
+        TextComponent nameMessage = new TextComponent(" *" + this.pinName);
+        nameMessage.setColor(ChatColor.GOLD);
+        nameMessage.setItalic(true);
+        output.addExtra(nameMessage);
+
+        // Add a colon and space to separate the pin name and location information
+        output.addExtra(": ");
+
+        // Create a TextComponent for the location message with green color
+        TextComponent locationMessage = new TextComponent("(" + this.worldFancyName + ") ");
+        locationMessage.addExtra(this.getCoordinatesString(false));
+        locationMessage.setColor(ChatColor.GREEN);
+
+        // Add the location message to the output TextComponent
+        output.addExtra(locationMessage);
+        output.addExtra(" ");
 
         // Send the constructed output TextComponent to the player
         player.spigot().sendMessage(output);

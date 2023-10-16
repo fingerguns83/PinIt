@@ -174,33 +174,7 @@ public final class PinIt extends JavaPlugin implements Listener {
 
         // Create a new Pin object representing the death location
         Pin deathPin = new Pin("Death Pin", "deathpin", player.getLocation(), plugin, player, true);
-
-        // Try to store the death pin information in the database
-        if (deathPin.store()){
-            // If successful, send a message to the player with instructions to view the death pin
-            // Make list of possible messages, then pick one at random to send
-            List<String> emphatics = new ArrayList<>();
-            emphatics.add("Whoopsie doodle! ");
-            emphatics.add("Oh, fiddlesticks! ");
-            emphatics.add("Uh-oh spaghetti-o! ");
-            emphatics.add("RIP in pepperoni. ");
-            emphatics.add("Gosh golly gee! ");
-            String message = emphatics.get(new Random(emphatics.size()).nextInt()) + "Looks like you died, friend.";
-
-            plugin.sendPinItMessage(player, message, false);
-
-            plugin.sendPinItMessage(player, "Here's where it happened. Make sure to save this pin in case you die on the way back.", false);
-            // Send a death message to the player's screen
-            deathPin.sendDeathMessage(player);
-        }
-        else {
-            // If storing fails, log an error message with details about the death location
-            getLogger().info("Error storing death message for \"" + player.getName() + "\"." +
-                "Player died at " + player.getLocation().getBlockX() + ", " +
-                player.getLocation().getBlockY() + ", " +
-                player.getLocation().getBlockZ() + " in " +
-                player.getLocation().getWorld().getName() + " (" + player.getLocation().getWorld().getUID() + ")");
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, new MakePinTask(plugin, player, deathPin));
     }
 
     private void makeDatabaseConnection() throws ClassNotFoundException, SQLException, IOException{
@@ -443,7 +417,7 @@ public final class PinIt extends JavaPlugin implements Listener {
         String inputString;
         if (config.getBoolean("mysql-enable")){
             inputString = "CREATE TABLE IF NOT EXISTS death_pins (" +
-                    "player_id varchar(64) NOT NULL UNIQUE," +
+                    "player_id varchar(64) NOT NULL UNIQUE, " +
                     "location_world varchar(64) NOT NULL, " +
                     "locationX INT NOT NULL, " +
                     "locationY INT NOT NULL, " +
@@ -451,7 +425,7 @@ public final class PinIt extends JavaPlugin implements Listener {
         }
         else {
             inputString = "CREATE TABLE IF NOT EXISTS death_pins (" +
-                    "player_id TEXT NOT NULL UNIQUE," +
+                    "player_id TEXT NOT NULL UNIQUE, " +
                     "location_world TEXT NOT NULL, " +
                     "locationX INTEGER NOT NULL, " +
                     "locationY INTEGER NOT NULL, " +
@@ -515,29 +489,29 @@ public final class PinIt extends JavaPlugin implements Listener {
             String inputString;
 
             // Check if a fancy name is set in the configuration for the current world
-            if (!config.isSet("fancy-names." + world.getName()) || config.getString("fancy-names." + world.getName()) == null){
+            if (!config.isSet("fancy-names." + world.getName())){
                 // If not set, set the fancy name to the default (world name)
                 config.set("fancy-names." + world.getName(), world.getName());
                 fancyName = world.getName();
             }
             else if (Objects.requireNonNull(config.getString("fancy-names." + world.getName())).length() > 16) {
                 // If the length of the fancy name exceeds 16 characters, truncate it
-                fancyName = config.getString("fancy-name." + world.getName().substring(0, 15));
+                fancyName = config.getString("fancy-names." + world.getName().substring(0, 15));
             }
             else {
                 // Otherwise, use the configured fancy name
-                fancyName = config.getString("fancy-name." + world.getName());
+                fancyName = config.getString("fancy-names." + world.getName());
             }
 
             if (config.getBoolean("mysql-enable")){
                 // For MySQL, construct the SQL statement for insertion or update
                 inputString = "INSERT INTO worlds (world_id, fancy_name, server) VALUES ('" +
-                        world.getUID() + "', '" +
-                        fancyName + "', '" +
-                        config.getString("server-name") + "') " +
-                        "ON DUPLICATE KEY UPDATE " +
-                        "fancy_name = '" + config.getString("fancy-names." + world.getName()) + "', " +
-                        "server = '" + config.getString("server-name") + "'";
+                    world.getUID() + "', '" +
+                    fancyName + "', '" +
+                    config.getString("server-name") + "') " +
+                    "ON DUPLICATE KEY UPDATE " +
+                    "fancy_name = '" + config.getString("fancy-names." + world.getName()) + "', " +
+                    "server = '" + config.getString("server-name") + "'";
             }
             else {
                 // For SQLite, construct the SQL statement for insertion or replacement
@@ -553,6 +527,8 @@ public final class PinIt extends JavaPlugin implements Listener {
         }
 
         saveConfig();
+        reloadConfig();
+        config = getConfig();
     }
     public void updatePlayersTable(Player player){
         printDebug("Updating players table (" + player.getName() + ")...");
@@ -578,7 +554,7 @@ public final class PinIt extends JavaPlugin implements Listener {
         if (config.getBoolean("mysql-enable")){
             input = "INSERT INTO info (record, data) VALUES (" +
                     "'pinit-version', '" +
-                    plugin.getDescription().getVersion() + "' " +
+                    plugin.getDescription().getVersion() + "') " +
                     "ON DUPLICATE KEY UPDATE data='" + plugin.getDescription().getVersion() + "'";
         }
         else {

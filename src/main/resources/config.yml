@@ -13,6 +13,7 @@ personal-pin-limit: -1
 # Leave this "false" for the default SQLite
 mysql-enable: false
 # These defaults are just for convenience, but you can change these values as needed.
+# You need to create the database ahead of time, the plugin will not attempt to make one for you.
 mysql-ip: 127.0.0.1
 mysql-port: 3306
 mysql-user: pinit

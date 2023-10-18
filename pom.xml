@@ -39,6 +39,10 @@
                             <pattern>org.bstats</pattern>
                             <shadedPattern>net.fg83.pinit</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.luckperms</pattern>
+                            <shadedPattern>net.fg83.pinit</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -71,10 +75,6 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>OnARandomBox</id>
-            <url>https://repo.onarandombox.com/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -85,16 +85,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.onarandombox.multiversecore</groupId>
-            <artifactId>Multiverse-Core</artifactId>
-            <version>4.3.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
             <version>5.4</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

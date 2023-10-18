@@ -261,10 +261,10 @@ public class Pin {
     public TextComponent makeTitle(){
         TextComponent title = new TextComponent(this.pinName);
         if (this.global){
-            title.setColor(ChatColor.BLUE);
+            title.setColor(ChatColor.GOLD);
         }
         else {
-            title.setColor(ChatColor.GOLD);
+            title.setColor(ChatColor.DARK_AQUA);
         }
 
         title.setItalic(true);
@@ -344,27 +344,9 @@ public class Pin {
         // Create a TextComponent to construct the output message
         TextComponent output = new TextComponent();
 
-        // Create a TextComponent for the pin name with gold color and italic style
-        TextComponent nameMessage = new TextComponent("*" + this.pinName);
-        nameMessage.setColor(ChatColor.GOLD);
-        nameMessage.setItalic(true);
-        output.addExtra(nameMessage);
-
-        // Add a colon and space to separate the pin name and location information
-        output.addExtra(": ");
-
-        // Create a TextComponent for the location message with green color
-        TextComponent locationMessage = new TextComponent("(" + this.worldFancyName + ") ");
-        locationMessage.addExtra(this.getCoordinatesString(false));
-        locationMessage.setColor(ChatColor.GREEN);
-
-        // Add the location message to the output TextComponent
-        output.addExtra(locationMessage);
-        output.addExtra(" ");
-
         // Create a TextComponent for the accept message (the [+] button) with dark green color
-        TextComponent acceptMessage = new TextComponent("[+]");
-        acceptMessage.setColor(ChatColor.DARK_GREEN);
+        TextComponent acceptMessage = new TextComponent("[+] ");
+        acceptMessage.setColor(ChatColor.LIGHT_PURPLE);
 
         // Construct the command for adding the pin to the target player's pin list
         String makePinCommand = "/makepin " + this.worldName +
@@ -383,6 +365,24 @@ public class Pin {
 
         // Add the "accept message" to the output TextComponent
         output.addExtra(acceptMessage);
+
+        // Create a TextComponent for the pin name with gold color and italic style
+        TextComponent nameMessage = new TextComponent(this.pinName);
+        nameMessage.setColor(ChatColor.GOLD);
+        nameMessage.setItalic(true);
+        output.addExtra(nameMessage);
+
+        // Add a colon and space to separate the pin name and location information
+        output.addExtra(": ");
+
+        // Create a TextComponent for the location message with green color
+        TextComponent locationMessage = new TextComponent("(" + this.worldFancyName + ") ");
+        locationMessage.addExtra(this.getCoordinatesString(false));
+        locationMessage.setColor(ChatColor.GREEN);
+
+        // Add the location message to the output TextComponent
+        output.addExtra(locationMessage);
+        output.addExtra(" ");
 
         // Send a PinIt message to the target player indicating that the owner has shared a pin
         plugin.sendPinItMessage(target, owner.getName() + " has shared a pin with you!", false);

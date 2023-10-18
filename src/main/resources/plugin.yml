@@ -2,7 +2,7 @@ name: PinIt
 version: '${project.version}'
 main: net.fg83.pinit.PinIt
 api-version: '1.19'
-softdepend: ['Multiverse-Core', LuckPerms]
+softdepend: ['LuckPerms']
 authors: [fingerguns83]
 description: Keep track of important locations
 website: https://fg83.net
@@ -66,7 +66,7 @@ commands:
     permission: pinit.server.delete
   deathpin:
     description: Get the pin of your last death. Players with "pinit.server.deathpins" can add a player argument to get another players' last death pin.
-    usage: /deathpin [player]
+    usage: /deathpin
     permission: pinit.use
   pinwarp:
     description: Teleport player to pin.

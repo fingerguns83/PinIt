@@ -30,6 +30,8 @@ public class TagList {
     }
 
     public void refresh() {
+        tags.clear();
+
         try {
             Statement statement = plugin.connection.createStatement();
 

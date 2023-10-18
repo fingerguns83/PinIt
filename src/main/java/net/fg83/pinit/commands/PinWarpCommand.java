@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class PinWarpCommand implements CommandExecutor {
     final PinIt plugin;
@@ -15,7 +14,7 @@ public class PinWarpCommand implements CommandExecutor {
     public PinWarpCommand(PinIt plugin){this.plugin = plugin;}
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check if the command name is not "pinwarp"
         if (!command.getName().equalsIgnoreCase("pinwarp")){
             return false;

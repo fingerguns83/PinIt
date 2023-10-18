@@ -36,12 +36,11 @@ import java.util.*;
 
 public final class PinIt extends JavaPlugin implements Listener {
     final PinIt plugin = this;
-
+    LuckPerms luckPermsApi;
     public final String versionString = plugin.getDescription().getVersion();
 
     public Connection connection;
     public FileConfiguration config;
-    private LuckPerms luckPermsApi;
     public TagList serverTags;
     public final Map<Player, TagList> playerTagLists = new HashMap<>();
     public final Map<String, PinItWorld> worldById = new HashMap<>();
@@ -87,7 +86,8 @@ public final class PinIt extends JavaPlugin implements Listener {
         }
 
         // Initiate Luck Perms
-        if (getServer().getPluginManager().isPluginEnabled("LuckPerms")){
+        if (Bukkit.getServicesManager().getRegistration(LuckPerms.class) != null){
+            getLogger().info("FOUND LUCKPERMS");
             luckPermsApi = LuckPermsProvider.get();
             createPermissionsSection();
         }
@@ -625,6 +625,10 @@ public final class PinIt extends JavaPlugin implements Listener {
     public Boolean validatePinTag(String tag, Player player){
         if (tag.contains(" ")){
             plugin.sendPinItMessage(player, "Pin category cannot contain spaces.", true);
+            return false;
+        }
+        else if (tag.equalsIgnoreCase("#all")){
+            plugin.sendPinItMessage(player, "That tag's reserved. Quit trying to break stuff. I knew your type would try this.", true);
             return false;
         }
         else if (tag.length() > 16){

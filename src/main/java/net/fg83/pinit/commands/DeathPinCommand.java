@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class DeathPinCommand implements CommandExecutor {
     final PinIt plugin;
@@ -17,7 +16,7 @@ public class DeathPinCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check if the command is not "deathpin"
         if (!command.getName().equalsIgnoreCase("deathpin")) {
             return false;
@@ -39,8 +38,8 @@ public class DeathPinCommand implements CommandExecutor {
             return false; // Incorrect command usage
         }
         else if (args.length == 1) {
-            // Check if the player has the "pinit.server" permission to query for another player
-            if (!player.hasPermission("pinit.server")) {
+            // Check if the player has the "pinit.server.deathpins" permission to query for another player
+            if (!player.hasPermission("pinit.server.deathpins")) {
                 return false;
             }
             targetPlayer = plugin.getServer().getOfflinePlayer(args[0].trim()).getUniqueId().toString();

@@ -30,10 +30,22 @@ public class FetchDeathPinTask implements Runnable{
             if (!resultSet.next()) {
                 plugin.sendPinItMessage(player, "No pins match this query.", false);
             } else {
+
+                // C
+                if (!player.getUniqueId().toString().equalsIgnoreCase(targetPlayerId)){
+                    Statement getPlayerNameStatement = plugin.connection.createStatement();
+                    ResultSet playerNameResult = getPlayerNameStatement.executeQuery("SELECT * FROM players WHERE player_id='" + targetPlayerId.replace("-", "") + "'");
+                    playerNameResult.next();
+                    String playerName = playerNameResult.getString("name");
+                    String message = playerName + "'s last death:";
+                    plugin.sendPinItMessage(player, message, false);
+                }
+
                 // Create a Pin object from the result set and send the death message
                 Pin pin = new Pin(resultSet, null, plugin, true);
                 pin.sendDeathMessage(player);
             }
+            statement.close();
         } catch (SQLException e) {
             // Log any SQLException that may occur
             plugin.getLogger().info(e.getMessage());

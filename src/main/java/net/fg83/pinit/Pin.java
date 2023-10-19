@@ -485,8 +485,8 @@ public class Pin {
         output.addExtra(acceptMessage);
 
         // Create a TextComponent for the pin name with gold color and italic style
-        TextComponent nameMessage = new TextComponent(" *" + this.pinName);
-        nameMessage.setColor(ChatColor.GOLD);
+        TextComponent nameMessage = new TextComponent(" ☠ " + this.pinName);
+        nameMessage.setColor(ChatColor.GRAY);
         nameMessage.setItalic(true);
         output.addExtra(nameMessage);
 

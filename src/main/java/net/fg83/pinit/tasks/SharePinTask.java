@@ -2,6 +2,8 @@ package net.fg83.pinit.tasks;
 
 import net.fg83.pinit.Pin;
 import net.fg83.pinit.PinIt;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -38,7 +40,26 @@ public class SharePinTask implements Runnable{
             // Check if the result set has a next row
             if (resultSet.next()){
                 // Create a new Pin object from the result set
-                new Pin(resultSet, player, plugin, false).sendShareMessage(target);
+                Pin pin = new Pin(resultSet, player, plugin, false);
+
+                TextComponent confirmation = new TextComponent("Shared ");
+                confirmation.setColor(ChatColor.WHITE);
+                confirmation.setBold(false);
+
+                TextComponent pinName = new TextComponent("[" + pin.getName() + "] ");
+                pinName.setColor(ChatColor.DARK_AQUA);
+                pinName.setBold(false);
+
+                TextComponent confEnd = new TextComponent("with " + target.getName() + "!");
+                confEnd.setColor(ChatColor.WHITE);
+                confEnd.setBold(false);
+
+                confirmation.addExtra(pinName);
+                confirmation.addExtra(confEnd);
+
+                plugin.sendPinItMessage(player, confirmation);
+
+                pin.sendShareMessage(target);
             }
             else {
                 // Inform the player about the invalid pin

@@ -56,6 +56,9 @@ public class PinListCommand implements CommandExecutor {
                 if (!args[2].equalsIgnoreCase("#all")){
                     tag = args[2];
                 }
+                else {
+                    tag = "#all";
+                }
             case 2:
                 // Check if the second argument is not "@all" or "@local" and set it as pinWorld
                 if (!args[1].equalsIgnoreCase("@all") && !args[1].equalsIgnoreCase("@local")){

@@ -642,7 +642,7 @@ public final class PinIt extends JavaPlugin implements Listener {
     public Boolean validateWorldName(String safeWorldName){
         boolean output = false;
         for (String world : plugin.getWorldNames(false)){
-            if (world.equalsIgnoreCase(safeWorldName)){
+            if (world.equals(safeWorldName)){
                 output = true;
                 break;
             }

@@ -11,6 +11,7 @@ permissions:
     default: op
     children:
       pinit.warp:
+        description: Allow player to warp to pins.
         default: op
       pinit.server:
         description: Allow player to control server pins
@@ -22,9 +23,11 @@ permissions:
           pinit.server.deathpins:
             description: Allow player to see other players' death pins.
       pinit.use:
+        description: Allow players to make and view pins.
         default: true
         children:
           pinit.use.share:
+            description: Allow player to share pins with other players.
             default: true
 
 commands:

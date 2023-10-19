@@ -40,6 +40,7 @@ public class DeathPinCommand implements CommandExecutor {
         else if (args.length == 1) {
             // Check if the player has the "pinit.server.deathpins" permission to query for another player
             if (!player.hasPermission("pinit.server.deathpins")) {
+                plugin.sendPinItMessage(player, "You don't have permission to view another player's death pin.", true);
                 return false;
             }
             targetPlayer = plugin.getServer().getOfflinePlayer(args[0].trim()).getUniqueId().toString();

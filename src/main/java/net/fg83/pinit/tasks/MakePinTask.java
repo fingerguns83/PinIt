@@ -48,11 +48,11 @@ public class MakePinTask implements Runnable {
             // Send success message to the player with the created pin name with applicable color
             // Then update the relevant tag list
             if (pin.getGlobal()) {
-                pinNameMessage.setColor(ChatColor.BLUE);
+                pinNameMessage.setColor(ChatColor.GOLD);
                 plugin.serverTags.refresh();
             }
             else {
-                pinNameMessage.setColor(ChatColor.GOLD);
+                pinNameMessage.setColor(ChatColor.DARK_AQUA);
                 plugin.updatePlayerTags(player);
             }
 

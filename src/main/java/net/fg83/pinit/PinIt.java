@@ -158,7 +158,6 @@ public final class PinIt extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         createPlayerTable(player);
         updatePlayersTable(player);
-        updatePlayerTags(player);
 
         if (config.getBoolean("velocity")){
             Bukkit.getScheduler().runTaskAsynchronously(plugin, new CheckWarpTask(plugin, player));
@@ -461,7 +460,16 @@ public final class PinIt extends JavaPlugin implements Listener {
                 "category TEXT DEFAULT 'uncategorized')";
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new DatabaseUpdateTask(plugin, input));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                Statement statement = plugin.connection.createStatement();
+                statement.executeUpdate(input);
+                updatePlayerTags(player);
+            }
+            catch (SQLException e){
+                plugin.getLogger().info(e.getMessage());
+            }
+        });
     }
 
     // Database Updates

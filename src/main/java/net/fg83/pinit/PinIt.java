@@ -95,9 +95,6 @@ public final class PinIt extends JavaPlugin implements Listener {
         // Initialize Server Tag List
         serverTags = new TagList(null, this);
 
-        // Refresh Tag Lists
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new TagListUpdater(this), 1200, 1200);
-
         // Refresh Server Maps
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new WorldMappingUpdater(this), 60, 6000);
 
@@ -105,7 +102,7 @@ public final class PinIt extends JavaPlugin implements Listener {
         int pluginId = 20056;
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new SimplePie("Implementation", () -> (config.getBoolean("velocity")) ? "Velocity" : "Standalone"));
-        metrics.addCustomChart(new SimplePie("Database", () -> (config.getBoolean("mysql-enabled")) ? "MySQL" : "SQLite"));
+        metrics.addCustomChart(new SimplePie("Database", () -> (config.getBoolean("mysql-enable")) ? "MySQL" : "SQLite"));
 
         // Register Events
         plugin.getServer().getPluginManager().registerEvents(this, this);
@@ -182,9 +179,9 @@ public final class PinIt extends JavaPlugin implements Listener {
         printDebug("Making database connection");
 
         // Check if MySQL is enabled in the configuration
-        if (config.getBoolean("mysql-enable")){
+        if (config.getBoolean("mysql-enable") || config.getBoolean("velocity-mode")){
             // Check if all required MySQL configuration parameters are set
-            if ((config.isSet("mysql-ip") && config.isSet("mysql-port") && config.isSet("mysql-database") && config.isSet("mysql-user") && config.isSet("mysql-password")) || config.getBoolean("velocity-mode")) {
+            if ((config.isSet("mysql-ip") && config.isSet("mysql-port") && config.isSet("mysql-database") && config.isSet("mysql-user") && config.isSet("mysql-password"))) {
                 // Extract MySQL configuration parameters from the configuration file
                 String dbIp = config.getString("mysql-ip");
                 String dbPort = config.getString("mysql-port");

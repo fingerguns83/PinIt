@@ -29,6 +29,7 @@ public class Pin {
     private Boolean global = false;
     private Boolean deathPin = false;
     private Player owner;
+    private String ownerName;
 
     // Make Pin From Location
     public Pin(String name, String category, Location location, PinIt plugin, @Nullable Player owner, Boolean isDeath){
@@ -41,6 +42,7 @@ public class Pin {
         }
         else {
             this.owner = owner;
+            this.ownerName = owner.getName();
         }
 
         this.pinName = name;
@@ -66,6 +68,7 @@ public class Pin {
         }
         else {
             this.owner = owner;
+            this.ownerName = owner.getName();
         }
 
         this.pinName = name;
@@ -134,6 +137,30 @@ public class Pin {
                 plugin.getLogger().info(e.getMessage());
                 return;
             }
+        }
+
+        this.server = this.plugin.worldById.get(this.worldId).getServer();
+        this.worldName = plugin.getPinItWorldName(worldId, false);
+        this.worldFancyName = plugin.getPinItWorldName(worldId, true);
+    }
+
+    // Make Pin From Database (For sharing)
+    public Pin(ResultSet entry, String ownerName, PinIt plugin){
+        this.plugin = plugin;
+        this.ownerName = ownerName;
+
+        try {
+            this.pinId = entry.getInt("id");
+            this.pinName = entry.getString("name");
+            this.worldId = entry.getString("location_world");
+            this.locationX = entry.getInt("locationX");
+            this.locationY = entry.getInt("locationY");
+            this.locationZ = entry.getInt("locationZ");
+            this.category = entry.getString("category");
+        }
+        catch (SQLException e){
+            plugin.getLogger().info(e.getMessage());
+            return;
         }
 
         this.server = this.plugin.worldById.get(this.worldId).getServer();
@@ -368,7 +395,7 @@ public class Pin {
 
         // Create a TextComponent for the pin name with gold color and italic style
         TextComponent nameMessage = new TextComponent(this.pinName);
-        nameMessage.setColor(ChatColor.GOLD);
+        nameMessage.setColor(ChatColor.DARK_AQUA);
         nameMessage.setItalic(true);
         output.addExtra(nameMessage);
 
@@ -385,7 +412,7 @@ public class Pin {
         output.addExtra(" ");
 
         // Send a PinIt message to the target player indicating that the owner has shared a pin
-        plugin.sendPinItMessage(target, owner.getName() + " has shared a pin with you!", false);
+        plugin.sendPinItMessage(target, ownerName + " has shared a pin with you!", false);
 
         // Send the constructed output TextComponent to the target player
         target.spigot().sendMessage(output);

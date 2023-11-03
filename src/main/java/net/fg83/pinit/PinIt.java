@@ -45,6 +45,8 @@ public final class PinIt extends JavaPlugin implements Listener {
     public final Map<Player, TagList> playerTagLists = new HashMap<>();
     public final Map<String, PinItWorld> worldById = new HashMap<>();
     public final Map<String, PinItWorld> worldByName = new HashMap<>();
+    public final Map<String, String> playersByName = new HashMap<>();
+    public final Map<String, String> playersById = new HashMap<>();
 
 
     @Override
@@ -70,6 +72,8 @@ public final class PinIt extends JavaPlugin implements Listener {
             createPlayersTable();
             createWorldsTable();
             updateWorldsTable();
+            createSharesTable();
+
 
             // Create optional tables if configured.
             if (config.getBoolean("enable-death-pins")){
@@ -87,7 +91,7 @@ public final class PinIt extends JavaPlugin implements Listener {
 
         // Initiate Luck Perms
         if (Bukkit.getServicesManager().getRegistration(LuckPerms.class) != null){
-            getLogger().info("FOUND LUCKPERMS");
+            getLogger().info("Connecting to LuckPerms");
             luckPermsApi = LuckPermsProvider.get();
             createPermissionsSection();
         }
@@ -97,6 +101,12 @@ public final class PinIt extends JavaPlugin implements Listener {
 
         // Refresh Server Maps
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, new WorldMappingUpdater(this), 60, 6000);
+
+        // Refresh Player List
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new RefreshPlayerListTask(this), 60, 100);
+
+        // Check Pin Shares
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new CheckShareTask(this), 60, 5);
 
         // Setup bStats
         int pluginId = 20056;
@@ -127,12 +137,13 @@ public final class PinIt extends JavaPlugin implements Listener {
         plugin.getCommand("deleteserverpin").setTabCompleter(new NullCompleter());
 
         plugin.getCommand("sharepin").setExecutor(new SharePinCommand(this));
+        plugin.getCommand("sharepin").setTabCompleter(new SharePinCompleter(this));
 
         plugin.getCommand("pinlist").setExecutor(new PinListCommand(this));
         plugin.getCommand("pinlist").setTabCompleter(new PinListCompleter(this));
 
         plugin.getCommand("deathpin").setExecutor(new DeathPinCommand(this));
-        plugin.getCommand("deathpin").setTabCompleter(new DeathPinCompleter());
+        plugin.getCommand("deathpin").setTabCompleter(new DeathPinCompleter(this));
 
         plugin.getCommand("pinwarp").setExecutor(new PinWarpCommand(this));
         plugin.getCommand("pinwarp").setTabCompleter(new NullCompleter());
@@ -387,6 +398,30 @@ public final class PinIt extends JavaPlugin implements Listener {
         Statement createWorldsTableStatement = connection.createStatement();
         createWorldsTableStatement.executeUpdate(inputString);
         createWorldsTableStatement.close();
+    }
+    private void createSharesTable() throws SQLException{
+        printDebug("Creating shares table...");
+
+        String inputString;
+
+        if (config.getBoolean("mysql-enable")){
+            inputString = "CREATE TABLE IF NOT EXISTS shares (" +
+                    "id INT PRIMARY KEY AUTO_INCREMENT, " +
+                    "pin_id INT NOT NULL, " +
+                    "player_to TEXT NOT NULL, " +
+                    "player_from TEXT NOT NULL)";
+        }
+        else {
+            inputString = "CREATE TABLE IF NOT EXISTS shares (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "pin_id INTEGER NOT NULL, " +
+                    "player_to TEXT NOT NULL, " +
+                    "player_from TEXT NOT NULL)";
+        }
+
+        Statement createSharesTableStatement = connection.createStatement();
+        createSharesTableStatement.executeUpdate(inputString);
+        createSharesTableStatement.close();
     }
     private void createWarpsTable() throws SQLException {
         printDebug("Creating warps table...");

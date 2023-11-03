@@ -7,10 +7,15 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DeathPinCompleter implements TabCompleter {
+
+    PinIt plugin;
+
+    public DeathPinCompleter(PinIt plugin){
+        this.plugin = plugin;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -28,8 +33,13 @@ public class DeathPinCompleter implements TabCompleter {
             return new ArrayList<>();
         }
         else if (args.length == 1 && player.hasPermission("pinit.server")){
-            // If there is one argument and the player has the required permission, return null for default tab completion
-            return null;
+            // If there is one argument and the player has the required permission, return player list
+            for (String targetPlayer : plugin.playersByName.keySet().stream().toList()) {
+                if (targetPlayer.startsWith(args[0].toLowerCase())) {
+                    output.add(targetPlayer);
+                }
+            }
+            return output;
         }
         else {
             // For any other case, return an empty list

@@ -54,16 +54,18 @@ public class SharePinCommand implements CommandExecutor {
         }
 
         // Find the target player by name
-        Player target = plugin.getServer().getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
+        //Player target = plugin.getServer().getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
 
         // Check if the target player is not found
-        if (target == null) {
-            plugin.sendPinItMessage(player, "Player is either offline or does not exist.", true);
+        if (plugin.playersByName.get(args[1]) == null) {
+            plugin.sendPinItMessage(player, "Player not found.", true);
             return false;
         }
+        else {
+            // Run SharePinTask asynchronously
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, new SharePinTask(plugin, player, args[1], pinId));
+        }
 
-        // Run SharePinTask asynchronously
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new SharePinTask(plugin, player, target, pinId));
         return true;
     }
 }

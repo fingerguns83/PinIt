@@ -6,7 +6,7 @@
 
     <groupId>net.fg83</groupId>
     <artifactId>PinIt</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.2</version>
     <packaging>jar</packaging>
 
     <name>PinIt</name>
@@ -37,10 +37,6 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>net.fg83.pinit</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.luckperms</pattern>
                             <shadedPattern>net.fg83.pinit</shadedPattern>
                         </relocation>
                     </relocations>
@@ -75,6 +71,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -88,13 +88,19 @@
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
             <version>5.4</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.LeonMangler</groupId>
+            <artifactId>PremiumVanishAPI</artifactId>
+            <version>2.9.0-4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

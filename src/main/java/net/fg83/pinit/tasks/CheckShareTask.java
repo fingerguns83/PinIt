@@ -1,17 +1,13 @@
 package net.fg83.pinit.tasks;
 
+import de.myzelyam.api.vanish.VanishAPI;
 import net.fg83.pinit.Pin;
 import net.fg83.pinit.PinIt;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class CheckShareTask implements Runnable {
     PinIt plugin;
@@ -35,6 +31,14 @@ public class CheckShareTask implements Runnable {
                     plugin.printDebug("Checking player \"" + player.getName() + "\" (" + player.getUniqueId() + ")");
                     if (player.getUniqueId().toString().replace("-", "").equalsIgnoreCase(selectedPlayer)){
                         plugin.printDebug("Player found!");
+
+                        if (plugin.getServer().getPluginManager().isPluginEnabled("PremiumVanish") || plugin.getServer().getPluginManager().isPluginEnabled("SuperVanish")){
+                            if (VanishAPI.getInvisiblePlayers().contains(player.getUniqueId())){
+                                return;
+                            }
+                        }
+
+
                         fetchPin(pinId, fromPlayerId).sendShareMessage(player);
                         deleteShare(shareId);
                     }

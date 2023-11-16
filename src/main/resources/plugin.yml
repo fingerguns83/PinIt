@@ -2,7 +2,8 @@ name: PinIt
 version: '${project.version}'
 main: net.fg83.pinit.PinIt
 api-version: '1.19'
-softdepend: ['LuckPerms']
+depend: [LuckPerms]
+softdepend: [PremiumVanish, SuperVanish]
 authors: [fingerguns83]
 description: Keep track of important locations
 website: https://fg83.net

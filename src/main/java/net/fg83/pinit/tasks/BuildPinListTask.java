@@ -80,14 +80,14 @@ public class BuildPinListTask implements Runnable {
     }
     private TextComponent makePreviousButton(String listType, String world, String tag){
         TextComponent prev = new TextComponent("<--");
-        prev.setColor(ChatColor.DARK_AQUA);
+        prev.setColor(ChatColor.YELLOW);
         prev.setBold(true);
         prev.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + listType + " " + world + " " + tag + " " + pinList.getPrev()));
         return prev;
     }
     private TextComponent makeNextButton(String listType, String world, String tag){
         TextComponent next = new TextComponent("-->");
-        next.setColor(ChatColor.DARK_AQUA);
+        next.setColor(ChatColor.YELLOW);
         next.setBold(true);
         next.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pinlist " + listType + " " + world + " " + tag + " " + pinList.getNext()));
         return next;

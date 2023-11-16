@@ -5,6 +5,7 @@ import net.fg83.pinit.Pin;
 
 import net.fg83.pinit.tasks.MakePinTask;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -58,6 +59,7 @@ public class PinItCommand implements CommandExecutor {
                 websiteMessage.setUnderlined(true);
                 websiteMessage.setBold(false);
                 websiteMessage.setColor(ChatColor.GREEN);
+                websiteMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://fg83.net"));
 
                 aboutMessage.addExtra(websiteMessage);
 

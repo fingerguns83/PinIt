@@ -25,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
@@ -89,10 +90,16 @@ public final class PinIt extends JavaPlugin implements Listener {
             plugin.setEnabled(false);
         }
 
+        Arrays.stream(getServer().getPluginManager().getPlugins()).toList().forEach(installedPlugin -> {
+            printDebug("Found plugin: " + installedPlugin.getName());
+        });
         // Initiate Luck Perms
-        if (Bukkit.getServicesManager().getRegistration(LuckPerms.class) != null){
-            getLogger().info("Connecting to LuckPerms");
+        if (getServer().getPluginManager().isPluginEnabled("LuckPerms")){
+            getLogger().info("Connecting to LuckPerms...");
+            //RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+            //assert provider != null;
             luckPermsApi = LuckPermsProvider.get();
+            getLogger().info("Successfully connected to LuckPerms!");
             createPermissionsSection();
         }
 
@@ -162,6 +169,7 @@ public final class PinIt extends JavaPlugin implements Listener {
                 getLogger().info(e.getMessage());
             }
         }
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     @EventHandler

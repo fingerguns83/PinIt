@@ -160,7 +160,7 @@ public class PinList {
         String fetchStatement = makeFetchStatement(pageNo, player, world, tag);
 
         // Log the constructed fetch statement
-        plugin.getLogger().info(fetchStatement);
+        plugin.printDebug(fetchStatement);
 
         // Count the total number of records with the specified parameters
         int recordCount = countRecords(player, world, tag);

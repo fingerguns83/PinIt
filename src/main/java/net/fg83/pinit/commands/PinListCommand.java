@@ -57,7 +57,7 @@ public class PinListCommand implements CommandExecutor {
                     tag = args[2];
                 }
                 else {
-                    tag = "#all";
+                    //tag = "#all";
                 }
             case 2:
                 // Check if the second argument is not "@all" or "@local" and set it as pinWorld

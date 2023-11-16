@@ -5,10 +5,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SharePinCompleter implements TabCompleter {
-
     PinIt plugin;
 
     public SharePinCompleter(PinIt plugin){
@@ -16,6 +16,15 @@ public class SharePinCompleter implements TabCompleter {
     }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return plugin.playersByName.keySet().stream().toList();
+        List<String> output = new ArrayList<>();
+        if (args.length > 1){
+            for (String target : plugin.playersByName.keySet().stream().toList()) {
+                if (target.toLowerCase().startsWith(args[1].toLowerCase())) {
+                    output.add(target);
+                }
+            }
+        }
+
+        return output;
     }
 }
